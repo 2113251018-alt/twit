@@ -70,6 +70,7 @@ async def scrape():
 
                     text = " ".join(text_parts).strip()
                     if not text:
+                        print(f"[~] {username}: tweet kosong, skip")
                         continue
 
                     imgs = await tweet.query_selector_all("img")
@@ -91,6 +92,7 @@ async def scrape():
 
                 async with lock:
                     temp.extend(local)
+                    print(f"[✓] {username}: {len(local)} tweets scraped")
 
             except Exception as e:
                 print(f"Error scraping {username}: {e}")
