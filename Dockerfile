@@ -1,5 +1,4 @@
 FROM python:3.11-slim
-
 WORKDIR /app
 
 # Install system dependencies for Chromium
@@ -16,8 +15,8 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Playwright + Chromium
-RUN playwright install chromium --with-deps
+# Install Playwright + Chromium (--with-deps handle sisanya)
+RUN playwright install --with-deps chromium
 
 # Copy app files
 COPY . .
