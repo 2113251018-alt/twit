@@ -172,4 +172,4 @@ if __name__ == "__main__":
     thread = threading.Thread(target=run_scraper, daemon=True)
     thread.start()
     print(f"[*] Scraper thread started, Flask on port {port}")  # tambah ini buat debug
-    app.run(debug=False, host="0.0.0.0", port=port)
+    app.run(debug=True, host="0.0.0.0", port=port)
