@@ -118,7 +118,7 @@ async def scrape():
 
             print(f"[✗] {username}: semua attempt gagal")
 
-        chunk_size = 2
+        chunk_size = 1
         for i in range(0, len(USERNAMES), chunk_size):
             chunk = USERNAMES[i : i + chunk_size]
             print(f"Scraping accounts: {', '.join(chunk)}")
@@ -133,7 +133,7 @@ async def scrape():
     print(f"Scrape done: {len(results)} tweets collected")
 
 
-async def scrape_loop(interval: int = 300):
+async def scrape_loop(interval: int = 600):
     print("[*] Scrape loop started")
     while True:
         print("Starting scrape...")
