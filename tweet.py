@@ -58,7 +58,7 @@ async def scrape():
 
                 tweets = await page.query_selector_all("article")
                 local = []
-                for tweet in tweets[:2]:
+                for tweet in tweets[:1]:
                     text_nodes = await tweet.query_selector_all(
                         '[data-testid="tweetText"] span, [data-testid="tweetText"] a'
                     )
