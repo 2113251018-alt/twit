@@ -41,10 +41,11 @@ async def scrape():
                 "--no-zygote",
             ]
         )
-        context = await browser.new_context()
-        await context.add_cookies(COOKIES)
 
         async def scrape_one(username):
+            # Bikin context per-akun, bukan shared — ini fix utamanya
+            context = await browser.new_context()
+            await context.add_cookies(COOKIES)
             page = await context.new_page()
             try:
                 await page.goto(
@@ -95,6 +96,7 @@ async def scrape():
                 print(f"Error scraping {username}: {e}")
             finally:
                 await page.close()
+                await context.close()  # close context-nya juga
 
         chunk_size = 2
         for i in range(0, len(USERNAMES), chunk_size):
@@ -105,12 +107,10 @@ async def scrape():
 
         await browser.close()
 
-    # Update global results dengan thread lock
     with results_lock:
         results = temp
 
     print(f"Scrape done: {len(results)} tweets collected")
-
 
 async def scrape_loop(interval: int = 300):
     while True:
