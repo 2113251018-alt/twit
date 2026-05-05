@@ -131,7 +131,7 @@ def route_tweets():
 
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 5000))
+    port = int(os.getenv("PORT", 8080))
     thread = threading.Thread(target=run_scraper, daemon=True)
     thread.start()
     app.run(debug=False, host="0.0.0.0", port=port)
