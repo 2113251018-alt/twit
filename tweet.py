@@ -31,7 +31,7 @@ async def scrape():
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(
-            headless=True,
+            headless=False,
             args=[
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
@@ -142,14 +142,24 @@ async def scrape_loop(interval: int = 600):
         await asyncio.sleep(interval)
 
 
+scraper_running = False
+scraper_lock = threading.Lock()
+
 def run_scraper():
+    global scraper_running
+    with scraper_lock:
+        if scraper_running:
+            print("[!] Scraper already running, skipping")
+            return
+        scraper_running = True
     try:
         asyncio.run(scrape_loop())
     except Exception as e:
         print(f"[FATAL] Scraper thread crashed: {e}")
         import traceback
         traceback.print_exc()
-
+    finally:
+        scraper_running = False
 
 @app.route("/tweets")
 def route_tweets():
@@ -161,4 +171,5 @@ if __name__ == "__main__":
     port = int(os.getenv("PORT", 8080))
     thread = threading.Thread(target=run_scraper, daemon=True)
     thread.start()
+    print(f"[*] Scraper thread started, Flask on port {port}")  # tambah ini buat debug
     app.run(debug=False, host="0.0.0.0", port=port)
